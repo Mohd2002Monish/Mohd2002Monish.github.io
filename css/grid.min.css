@@ -514,3 +514,8 @@ html {
     max-width: 100%;
   }
 }
+.resume_tag {
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+}

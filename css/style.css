@@ -678,7 +678,7 @@ a {
   -webkit-animation-name: fadeInUp;
   animation-name: fadeInUp;
 }
-/*# sourceMappingURL=style.css.map */
+
 
 #insta {
   background: #f09433;
@@ -707,4 +707,23 @@ a {
     #bc1888 100%
   );
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
+}
+.profile_picHover{
+  border-bottom:5px solid #7c00c9;border-left:5px solid #7c00c9;width: 300px; height:300px; border-radius: 50%
+}
+.resume_tag{
+  background-color: white;
+  border: none;
+  color: #7c00c9 ;
+  border-radius: 15px;
+  width: 140px;
+  height: 40px;
+  font-weight: bolder;
+  font-size: larger;
+  border: 3px solid #7c00c9 ;
+}
+.resume_tag:hover{
+background-color:#7c00c9 ;
+color: white;
+
 }
