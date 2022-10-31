@@ -515,6 +515,8 @@ html {
   }
 }
 .resume_tag {
+  margin-top: 20px;
+  margin-bottom: 10px;
   background-color: white;
   border: none;
   color: #7c00c9;

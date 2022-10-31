@@ -11,16 +11,20 @@ frm.addEventListener("submit", (e) => {
   );
 });
 
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
-    e.preventDefault();
+document
+  .querySelectorAll('a[href^="#"]')
+  .forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
 
-    document.querySelector(this.getAttribute("href")).scrollIntoView({
-      behavior: "smooth",
-      block: "center",
+      document
+        .querySelector(this.getAttribute("href"))
+        .scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
     });
   });
-});
 
 var typed = new Typed("#typed", {
   stringsElement: "#typed-strings",
@@ -63,7 +67,7 @@ const skills = new Siema({
   onInit: () => {},
   onChange: () => {},
 });
-setInterval(() => skills.next(), 1500);
+setInterval(() => skills.next(), 2000);
 
 const navbarNav = document.querySelector(".navbar-nav");
 const toggle = document.querySelector(".toggle");
