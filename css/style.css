@@ -610,7 +610,7 @@ a {
     animation-fill-mode: both;
   }
   .sourceVisit {
-    padding: -10px;
+    border: 1px solid #9c2dbb;
   }
 
   @-webkit-keyframes backInLeft {
@@ -722,7 +722,7 @@ a {
 }
 
 .sourceVisit {
-  border-radius: 100px;
+  border-radius: 140px;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
@@ -734,5 +734,5 @@ a {
 .sourceVisit:hover {
   background-color: #9c2dbb;
   color: #fff;
-  border: none;
+  border: 1px solif #fff;
 }
