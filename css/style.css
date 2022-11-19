@@ -232,6 +232,7 @@ a {
 .worKExp {
   width: 60%;
   margin-left: 20%;
+  text-align: left;
 }
 .work .project .text {
   color: white;
@@ -288,7 +289,14 @@ a {
   margin-top: 100px;
   text-align: center;
 }
-
+.worKExp1 {
+  width: 40%;
+  margin-left: 30%;
+}
+.worKExp {
+  width: 60%;
+  margin-left: 20%;
+}
 .experience h2 {
   padding: 10px;
   border-bottom: 5px solid #7c00c9;
@@ -573,6 +581,7 @@ a {
   .experience .company h3 {
     padding-left: 10px;
   }
+
   .experience .company ul {
     font-size: 0.9rem;
     margin-left: 0px;
@@ -599,6 +608,41 @@ a {
   .worKExp {
     width: 90%;
     margin-left: 5%;
+    text-align: center;
+  }
+  .worKExp1 {
+    width: 90%;
+    margin-left: 5%;
+  }
+  .resumeTag {
+    margin: -20%;
+  }
+
+  .aboutDes89 {
+    display: flex;
+    justify-content: center;
+  }
+  .aboutImg89 {
+    flex-direction: column;
+  }
+  .Github-section > :last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .last {
+    margin-right: 30%;
+  }
+
+  .Github-section {
+    width: 100%;
+  }
+
+  #Github-sectionimg {
+    display: none;
+  }
+  .Github-section {
+    margin: auto;
   }
 
   .animated {
@@ -714,11 +758,11 @@ a {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
 }
 .profile_picHover {
-  border-bottom: 5px solid #7c00c9;
-  border-left: 5px solid #7c00c9;
+  border: 2px solid #7c00c9;
+
   width: 300px;
   height: 300px;
-  border-radius: 50%;
+  border-radius: 4%;
 }
 
 .sourceVisit {
@@ -735,4 +779,47 @@ a {
   background-color: #9c2dbb;
   color: #fff;
   border: 1px solif #fff;
+}
+
+.Github-section > :last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+#Github-sectionimg {
+  width: 500px;
+}
+.Github-section {
+  margin: auto;
+}
+
+.aboutImg89 {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.resumeTag {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  background-color: white;
+  border: none;
+  color: #7c00c9;
+  border-radius: 15px;
+  width: 140px;
+  height: 40px;
+  font-weight: bolder;
+  font-size: larger;
+  border: 3px solid #7c00c9;
+  margin-left: 20%;
+}
+.resumeTag:hover {
+  background-color: #7c00c9;
+  color: white;
+}
+.aboutDes89 {
+  text-align: left;
 }
