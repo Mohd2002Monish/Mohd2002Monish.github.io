@@ -1,5 +1,6 @@
 new WOW().init();
 
+
 var frm = document.querySelector("#contact");
 frm.addEventListener("submit", (e) => {
   e.preventDefault();
