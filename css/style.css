@@ -90,7 +90,7 @@ a {
 
 .parallax {
   background-color: #fff;
-  background-image: url(../img/home/page1.jpg);
+  background-image: url(../img/home/animation-software-header.gif);
   background-attachment: fixed;
   height: 100vh;
   background-position: center;
@@ -108,18 +108,24 @@ a {
 .home .typing {
   font-size: 50px;
   font-weight: 600;
+  margin-top: 370px;
 }
 
 .home .subtitle {
   font-weight: 600;
+  color: black;
+
+  margin-left: 30px;
 }
 
 .home .subtitle a {
-  color: #7c00c9;
+  color: white;
 }
 
 .home .subtitle a:hover {
   text-decoration: underline;
+  font-size: 24;
+  transition: 00.5s;
 }
 
 .home .siema img {
@@ -527,6 +533,7 @@ a {
     top: 77px;
     left: -100%;
     width: 100%;
+
     text-align: center;
     background-color: #fff;
     color: #000;
@@ -544,7 +551,8 @@ a {
     padding-top: calc((100vh - 285px) / 2);
   }
   .home .typing {
-    font-size: 20px;
+    font-size: 25px;
+    margin-top: 265px;
   }
   .home .siema img {
     width: 100%;
@@ -822,4 +830,10 @@ a {
 }
 .aboutDes89 {
   text-align: left;
+}
+.lastkingStanding:hover {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  transition-duration: 0.5s;
+  border-radius: 10px;
 }
