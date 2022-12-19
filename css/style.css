@@ -116,7 +116,7 @@ a {
 .home .subtitle {
   font-weight: 600;
   color: black;
-font-size: 24px;
+  font-size: 24px;
   margin-left: 0px;
 }
 
@@ -531,7 +531,7 @@ font-size: 24px;
     background-color: #fff;
     background-image: url(../img/home/animation-software-header.gif);
     background-attachment: fixed;
-   background-color: #107ae1;
+    background-color: #107ae1;
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -665,7 +665,6 @@ font-size: 24px;
   }
 
   #Github-sectionimg {
- 
     width: 85%;
   }
   .Github-section {
@@ -847,11 +846,12 @@ font-size: 24px;
   font-size: large;
   border: 1px solid #107ae1;
   margin-left: 20%;
+  cursor: pointer;
 }
 .resumeTag:hover {
   background-color: white;
-
   color: #107ae1;
+  transition-duration: 0.5s;
 }
 .aboutDes89 {
   text-align: left;
