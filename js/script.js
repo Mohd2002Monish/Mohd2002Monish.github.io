@@ -57,7 +57,7 @@ const skills = new Siema({
     992: 3,
   },
   selector: ".skill",
-  duration: 200,
+  duration: 150,
   easing: "ease-out",
   startIndex: 0,
   draggable: true,
