@@ -43,6 +43,10 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
   <link rel="stylesheet" href="css/grid.min.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <script src="https://unpkg.com/github-calendar@latest/dist/github-calendar.min.js">
+  </script>
+
+  <!-- Optionally, include the theme (if you don't want to struggle to write the CSS) -->
   <link rel="stylesheet" href="https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css" />
 </head>
 
@@ -116,7 +120,7 @@
           <div class="aboutImg89">
             <div>
               <div>
-                <div id="aboutQ"><img class="profile_picHover" src="/Mohd/out.png" alt=""></div>
+                <div id="aboutQ"><img class="profile_picHover" src="./Mohd/Mohd_Profile.jpeg" alt=""></div>
               </div>
 
             </div>
@@ -134,7 +138,8 @@
                 </p>
               </div>
 
-              <div class="aboutDes89 last"> <button class="resumeTag"> <a href="Mohd/Mohd_Monish.pdf" target="_blank"
+              <div class="aboutDes89 last"> <button class="resumeTag"> <a
+                    href="https://drive.google.com/file/d/1lbTos3Yt-PbtC2tKSXfWKBYVqfwxi724/view" target="_blank"
                     download>Resume </a> <i class="fa fa-download" aria-hidden="true"></i></button></div>
             </div>
 
@@ -233,7 +238,8 @@
               <p>Next.js</p>
             </div>
             <div>
-              <img alt="AWS" src="./img/skills/11596297710norqoyro9ucidpwlx5kca0escs1mjaqws01rrowaqv1zeqgman1omgavuq0g46dvvxqtprcthj8wkhjl08ymhlh54fyfrjsh9nwh-removebg-preview.png" />
+              <img alt="AWS"
+                src="./img/skills/11596297710norqoyro9ucidpwlx5kca0escs1mjaqws01rrowaqv1zeqgman1omgavuq0g46dvvxqtprcthj8wkhjl08ymhlh54fyfrjsh9nwh-removebg-preview.png" />
               <p>AWS</p>
             </div>
             <div>
@@ -268,27 +274,26 @@
         </div>
         <div style=" padding:40px " class="col-12 col-lg-4 lastkingStanding">
           <div style="border-radius: 10px" class="project wow fadeInUp">
-            <img style="border-radius: 10px" src="./Mohd/Screenshot from 2022-10-31 15-12-44.png" alt="" />
+            <img style="border-radius: 10px" src="./Mohd/Medspharma.png" alt="" />
 
           </div>
           <div class="title">
-            <h2 style="font-size:16px ;">Beauty</h2>
+            <h2 style="font-size:16px ;">Medpharma</h2>
 
-            <a class="sourceVisit" href="https://gleaming-hotteok-a2ad5e.netlify.app/" target="blank"
-              class="text">Live</a>
+            <a class="sourceVisit" href="https://medspharma.netlify.app/" target="blank" class="text">Live</a>
 
-            <a class="sourceVisit" href="https://github.com/Navedphysicist/BeautyBebo" target="blank"
+            <a class="sourceVisit" href="https://github.com/AkashPanda1701/jagged-walk-7134" target="blank"
               class="text">Github</a>
-            <p style="font-size:16px ;text-align:left;font-weight:500;"><b>Stack : </b>Html, CSS, JavaScript, React,
-              Redux</p>
-            <p style="text-align:left ;font-weight:500;"><b>Des : </b>Beauty Bebo is an E-commerce web application for
-              buying Skincare, Hair care, Ayurveda products, and many more. We have used React.JS Redux and Material UI
-              as a Tech Stack.</p>
+            <p style="font-size:16px ;text-align:left;font-weight:500;"><b>Stack : </b>Html, CSS, JavaScript, Next.js,
+              Firebase, Node, Express, MongoDB</p>
+            <p style="text-align:left ;font-weight:500;"><b>Des : </b>MedsPharma is a consumer health-care 'online-app'
+              that provide customers on demand access to all products and purchase
+              them according to their needs</p>
           </div>
         </div>
         <div style=" padding:40px " class="col-12 col-lg-4 lastkingStanding">
           <div style="border-radius: 10px" class="project wow fadeInUp" data-wow-delay="0.1s">
-            <img style="border-radius: 10px" src="./Mohd/Screenshot from 2022-11-19 21-57-43.png " alt="" />
+            <img style="border-radius: 10px" src="./Mohd/kfc.png" alt="" />
 
           </div>
           <div class="title">
@@ -308,7 +313,7 @@
         </div>
         <div style=" padding:40px ; " class="col-12 col-lg-4 lastkingStanding">
           <div style="border-radius: 10px" class="project wow fadeInUp" data-wow-delay="0.2s">
-            <img style="border-radius: 10px" src="./Mohd/Screenshot from 2022-10-31 15-12-11.png" alt="" />
+            <img style="border-radius: 10px" src="./Mohd/Meesho.png" alt="" />
 
           </div>
           <div class="title">
@@ -457,6 +462,19 @@
 
   </script>
   <script src="js/script.js"></script>
+  <script>
+    GitHubCalendar(".calendar", "Mohd2002Monish");
+
+    // or enable responsive functionality:
+    GitHubCalendar(".calendar", "Mohd2002Monish", { responsive: true });
+
+    // Use a proxy
+    GitHubCalendar(".calendar", "Mohd2002Monish", {
+      proxy(username) {
+        return fetch(`https://your-proxy.com/github?user=${"Mohd2002Monish"}`)
+      }
+    }).then(r => r.text())
+  </script>
 </body>
 
 </html>

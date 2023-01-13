@@ -97,10 +97,4 @@ window.addEventListener("scroll", () => {
     navbarNav.classList.remove("navBar");
   }
 });
-window.onload = function () {
-  GitHubCalendar(".calendar", "Mohd2002Monish");
-  // or enable responsive functionality:
-  GitHubCalendar(".calendar", "Mohd2002Monish", {
-    responsive: true,
-  });
-};
+
