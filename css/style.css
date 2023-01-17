@@ -373,12 +373,10 @@ a {
   transition-duration: 0.5s;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    
 }
 
 .contact .form h2 {
   font-size: 24px;
-  
 }
 
 .contact .form .textarea {
@@ -435,7 +433,6 @@ a {
 .contact .form:hover {
   -webkit-box-shadow: none;
   box-shadow: none;
-  
 }
 
 .footer {
@@ -529,6 +526,7 @@ a {
 }
 .calendar {
   color: #007bb5;
+  
 }
 @media (max-width: 992px) {
   .parallax {
@@ -659,13 +657,18 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
   .last {
     margin-right: 30%;
   }
 
   .Github-section {
-    width: 100%;
+    width: 90%;
+   
+  }
+  .calendar{
+    display: none;
   }
 
   #Github-sectionimg {
@@ -822,14 +825,16 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
+  
 }
 
 #Github-sectionimg {
-  width: 380px;
+  width: 360px;
 }
 .Github-section {
   margin: auto;
+  width: 65%;
 }
 
 .aboutImg89 {
@@ -865,8 +870,8 @@ a {
   text-align: left;
 }
 .lastkingStanding:hover {
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  box-shadow: #1078e154 0px 1px 2px 0px,
+    #1078e154 0px 2px 6px 2px;
   transition-duration: 0.5s;
   border-radius: 10px;
 }
