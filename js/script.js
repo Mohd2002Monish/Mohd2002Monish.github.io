@@ -29,7 +29,7 @@ document
 
 var typed = new Typed("#typed", {
   stringsElement: "#typed-strings",
-  typeSpeed: 40,
+  typeSpeed: 70,
   backSpeed: 10,
   loop: true,
 });
@@ -56,9 +56,9 @@ const skills = new Siema({
     768: 1,
     992: 3,
   },
-  selector: ".skill",
+  selector: "",
   duration: 150,
-  easing: "ease-out",
+  easing: "",
   startIndex: 0,
   draggable: true,
   multipleDrag: true,
@@ -92,8 +92,8 @@ window.addEventListener("scroll", () => {
   } else if (window.pageYOffset == 0) {
     navbar.style.height = "77px";
     navbar.style.lineHeight = "77px";
-    navbar.style.backgroundColor = "black";
-    navbar.style.color = "white";
+    navbar.style.backgroundColor = "white";
+    navbar.style.color = "black";
     navbarNav.classList.remove("navBar");
   }
 });
