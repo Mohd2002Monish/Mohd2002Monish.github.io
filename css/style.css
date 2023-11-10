@@ -95,9 +95,9 @@ a {
   height: 100vh;
   background-color: #107ae1;
   background-repeat: no-repeat;
-  background-position-x: 3%;
+  background-position-x: -10%;
   background-position-y: 90%;
-  background-size: 30%;
+  background-size: 50%;
 }
 
 .home {
@@ -172,7 +172,17 @@ a {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+.AboutPicProfile {
+  border-radius: 20px;
+  width: 600px;
+  height: 400px;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(1, 46, 1, 0.292);
+}
 .skills {
   margin-top: 100px;
   text-align: center;
@@ -221,7 +231,7 @@ a {
 }
 
 .skills .skill img {
-  height: 40px;
+  height: 60px;
   padding-right: 20px;
   padding-left: 20px;
 }
@@ -229,7 +239,7 @@ a {
 .skills .skill p {
   margin: 0;
   color: #666666;
-  font-size: 15px;
+  font-size: 20px;
 }
 
 .work {
@@ -285,7 +295,6 @@ a {
   position: relative;
   top: 50%;
 
-  /* left: 50%; */
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   text-align: center;
@@ -559,22 +568,37 @@ a {
 .calendar {
   color: #007bb5;
 }
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(6, 200px);
+  grid-template-rows: repeat(2, 150px);
+  grid-area: 10px;
+  cursor: pointer;
+}
 @media (max-width: 992px) {
   .grid2 {
     display: flex;
     flex-direction: column;
   }
+  .grid3 {
+    display: grid;
+    grid-template-columns: repeat(2, 140px);
+    grid-template-rows: repeat(6, 150px);
+    grid-area: 10px;
+    cursor: pointer;
+  }
+  .AboutPicProfile {
+    width: 350px;
+    height: 400px;
+  }
   .grid {
     display: flex;
   }
+
   .parallax {
-    background-color: #fff;
-    background-image: url(../img/home/animation-software-header.gif);
-    background-attachment: fixed;
-    background-color: #107ae1;
-    background-position-x: 0rem;
-    background-repeat: no-repeat;
-    background-size: 30%;
+    background-position-x: 45%;
+    background-position-y: 45%;
+    background-size: 100%;
   }
   .gitAndResume {
     grid-template-columns: repeat(1, 1fr);
@@ -715,9 +739,6 @@ a {
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
   }
-  .sourceVisit {
-    border: 1px solid #107ae1;
-  }
 
   @-webkit-keyframes backInLeft {
     0% {
@@ -820,18 +841,20 @@ a {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
 }
 .profile_picHover {
-  border: 2px solid #107ae1;
-  width: 350px;
+  width: 250px;
+  height: 250px;
   border-radius: 4%;
+  padding: 5px;
+  border-radius: 50%;
+  box-shadow: #1078e154 0px 0px 0px 1px, #1078e154 0px 0px 0px 1px inset;
 }
 .profile_picHover:hover {
-  border: 2px solid #107ae1;
-  box-shadow: #1078e154 0px 19px 38px, #1078e161 0px 15px 12px;
   cursor: pointer;
   transition: 1s;
 }
+
 .sourceVisit {
-  border-radius: 140px;
+  border-radius: 6px;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
@@ -904,15 +927,18 @@ a {
 .grid {
   justify-content: center;
   align-items: center;
-
   gap: 20px;
+  margin-top: 50px;
+}
+.grid2 {
+  display: flex;
+}
+
+.boxShadow {
   margin-top: 50px;
   padding: 40px;
   border-radius: 10px;
   box-shadow: #ffffff 0px 1px 2px 0px, rgb(228, 232, 246) 0px 2px 6px 2px;
-}
-.grid2 {
-  display: flex;
 }
 .flex {
   display: flex;
@@ -928,5 +954,5 @@ a {
 
 .skillhoverBox {
   padding: 20px;
-  width: 120px;
+  width: 200px;
 }
