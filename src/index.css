@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0a0f1e;
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0f1e;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #7c3aed;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #06b6d4;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent;
+  }
+
+  .section-title {
+    @apply text-4xl md:text-5xl font-bold text-center mb-4 gradient-text;
+  }
+
+  .section-subtitle {
+    @apply text-gray-400 text-center mb-16 text-lg;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-semibold text-white 
+           bg-gradient-to-r from-violet-600 to-cyan-500 
+           hover:from-violet-500 hover:to-cyan-400 
+           transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/25
+           hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 rounded-xl font-semibold text-white border border-white/20 
+           hover:border-violet-400 hover:bg-white/5 
+           transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .nav-link {
+    @apply text-gray-300 hover:text-white font-medium transition-colors duration-200 
+           relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 
+           after:bg-gradient-to-r after:from-violet-400 after:to-cyan-400 
+           after:transition-all after:duration-300 hover:after:w-full;
+  }
+
+  .skill-card {
+    @apply glass-card p-6 text-center flex flex-col items-center gap-3 
+           hover:border-violet-500/40 hover:bg-white/10 
+           transition-all duration-300 hover:-translate-y-1 cursor-default
+           hover:shadow-lg hover:shadow-violet-500/10;
+  }
+
+  .project-card {
+    @apply glass-card overflow-hidden
+           hover:border-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/10
+           transition-all duration-500;
+  }
+
+  .timeline-item {
+    @apply relative pl-8 pb-10 border-l-2 border-violet-600/30 last:border-l-0;
+  }
+
+  .form-input {
+    @apply w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3
+           text-white placeholder-gray-500 outline-none
+           focus:border-violet-500 focus:bg-white/10 focus:ring-2 focus:ring-violet-500/20
+           transition-all duration-200;
+  }
+
+  .admin-input {
+    @apply w-full border border-white/10 rounded-lg px-4 py-2.5
+           text-white placeholder-gray-500 outline-none text-sm
+           focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20
+           transition-all duration-200;
+    background-color: #0d1526;
+  }
+}
+
+/* Orb animations */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: float 8s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #7c3aed, transparent);
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #06b6d4, transparent);
+  top: 200px;
+  right: -50px;
+  animation-delay: 2s;
+}
+
+.orb-3 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, #8b5cf6, transparent);
+  bottom: 100px;
+  left: 30%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(1deg); }
+  66% { transform: translateY(10px) rotate(-1deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}

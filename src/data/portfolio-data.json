@@ -1,0 +1,179 @@
+{
+  "skills": [
+    {
+      "name": "HTML5",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+      "level": "Expert",
+      "id": "1"
+    },
+    {
+      "id": "2",
+      "name": "CSS3",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+      "level": "Expert"
+    },
+    {
+      "id": "3",
+      "name": "JavaScript",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+      "level": "Expert"
+    },
+    {
+      "id": "4",
+      "name": "React JS",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+      "level": "Expert"
+    },
+    {
+      "id": "5",
+      "name": "Next.js",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+      "level": "Advanced"
+    },
+    {
+      "id": "6",
+      "name": "Node.js",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+      "level": "Advanced"
+    },
+    {
+      "id": "7",
+      "name": "Express.js",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+      "level": "Advanced"
+    },
+    {
+      "id": "8",
+      "name": "MongoDB",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+      "level": "Advanced"
+    },
+    {
+      "id": "9",
+      "name": "Redux",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg",
+      "level": "Intermediate"
+    },
+    {
+      "id": "10",
+      "name": "Tailwind CSS",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+      "level": "Expert"
+    },
+    {
+      "id": "11",
+      "name": "AWS",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
+      "level": "Intermediate"
+    },
+    {
+      "id": "12",
+      "name": "Git",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+      "level": "Advanced"
+    },
+    {
+      "id": "13",
+      "name": "TypeScript",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+      "level": "Intermediate"
+    },
+    {
+      "id": "14",
+      "name": "REST API",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg",
+      "level": "Advanced"
+    }
+  ],
+  "projects": [
+    {
+      "id": "2",
+      "title": "KFC Clone",
+      "image": "https://opengraph.githubassets.com/1/H-unique245/axiomatic-trouble-8860",
+      "stack": [
+        "React",
+        "CSS",
+        "Redux",
+        "Firebase",
+        "Node.js",
+        "Express",
+        "MongoDB"
+      ],
+      "description": "A full-stack collaborative project at Masai School. Goal was to create a full-stack clone of the KFC website as close as possible. Built by a team of 4 developers in 5 days.",
+      "liveUrl": "https://axiomatic-trouble-8860-38bfe.web.app/cart",
+      "githubUrl": "https://github.com/H-unique245/axiomatic-trouble-8860"
+    },
+    {
+      "id": "1",
+      "title": "MedsPharma",
+      "image": "https://user-images.githubusercontent.com/94745544/199207187-1605a618-2e09-4112-90b0-b752d9d53495.png",
+      "stack": [
+        "Next.js",
+        "Firebase",
+        "Node.js",
+        "Express",
+        "MongoDB"
+      ],
+      "description": "MedsPharma is a consumer healthcare online-app that provides customers on-demand access to all products and lets them purchase according to their needs.",
+      "liveUrl": "https://medspharma.netlify.app/",
+      "githubUrl": "https://github.com/AkashPanda1701/jagged-walk-7134"
+    },
+    {
+      "id": "3",
+      "title": "Meesho Clone",
+      "image": "https://opengraph.githubassets.com/1/prakash817/meesho",
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "REST API"
+      ],
+      "description": "A clone of meesho.com providing online shopping for a wide variety of clothes and electronic products. Led the team as project manager and main contributor.",
+      "liveUrl": "https://thriving-crostata-7798c0.netlify.app/",
+      "githubUrl": "https://github.com/prakash817/meesho"
+    }
+  ],
+  "experiences": [
+    {
+      "company": "Empiric Infotech LLP",
+      "role": "Full Stack MERN Developer (Full-time)",
+      "duration": "1 Year",
+      "year": "12/2024 - Present",
+      "description": "-Built and maintained Admin Panel and User Panel using React.js with responsive and scalable UI components.\n-Led the end-to-end design and development of an AI-powered Applicant Tracking System (ATS) from scratch.\n-Designed and developed RESTful APIs using Node.js and Express.js to support core application workflows.\n-Implemented microservices-based backend architecture to improve scalability, performance, and maintainability.\n-Integrated AI-driven features using ChatGPT API to automate candidate screening, communication, and workflow intelligence.\n-Designed and automated complex business workflows using n8n, reducing manual operations and improving system efficiency.\n-Implemented Elasticsearch for advanced search, filtering, and high-performance data retrieval.\n-Containerized services using Docker and deployed applications on DigitalOcean with production-ready configurations.\n-Managed Cloudflare for DNS, security, and performance optimization.",
+      "id": "1779557136160"
+    },
+    {
+      "company": "Corenet Tech LTD",
+      "role": "React.js Developer (Project Based)",
+      "duration": "6 Months",
+      "year": "06/2024 - 12/2024",
+      "description": "-A tech company specializing in Digital Marketing and software solutions.\n-Delivered 4 projects as the primary React.js developer\n-Admin Panel for a product\n-Business-facing web view of the same product\n-Community service platform for London-based students\nStatic shop website\n-Built scalable, modular, and reusable React.js components",
+      "id": "1779557075128"
+    },
+    {
+      "company": "Surties - Surat No.1 Digital Media",
+      "role": "Associate Software Developer",
+      "duration": "1 Year 6 Months",
+      "year": "12/2022 - 06/2024",
+      "description": "TECH STACK :\nReact.js, Node.js, Express.js, Wordpress Netlify and Render\n-Role-based admin panel with authorization (Admin, Editor, User)\n-Solely responsible for project development and deployment\n-Secure authentication (account lockout after 5 failed login attempts; only Admin could unblock)\n-Additionally contributed to building and maintaining an e-commerce WordPress website",
+      "id": "2"
+    },
+    {
+      "company": "Dressme.ai",
+      "role": "React Native Developer Intern",
+      "duration": "3 Months",
+      "year": "2022",
+      "description": "Honed skills in mobile app development, collaborating with a team to deliver efficient and user-friendly solutions using React Native.",
+      "id": "1"
+    }
+  ],
+  "about": {
+    "bio": "I am Mohd Monish and I am a full-stack MERN Developer. Since childhood, I have always been excited to work on computers. After passing my intermediate examination, I decided to take up software development. During the pandemic, I decided to learn coding on my own and that is how I figured out my passion for this field, after which I joined a coding bootcamp and began my journey toward becoming a Full Stack Web Developer.",
+    "github": "https://github.com/Mohd2002Monish",
+    "linkedin": "https://www.linkedin.com/in/mohd2002monish/",
+    "instagram": "https://www.instagram.com/mohdmonish__/",
+    "facebook": "https://www.facebook.com/monish.ali.353803/",
+    "email": "mohd2002monish@gmail.com",
+    "resumeUrl": "/Mohd_Monish.pdf"
+  }
+}
