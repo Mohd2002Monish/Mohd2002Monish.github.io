@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Check } from 'lucide-react'
+import { Check, Sparkles } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
-import { fetchFromCloudJson, saveToCloudJson } from '../utils/cloudJson'
+import { fetchFromCloudJson, saveToCloudJson, createJsonBin } from '../utils/cloudJson'
 import toast from 'react-hot-toast'
 
 export default function SettingsManager() {
@@ -188,6 +188,31 @@ function CloudJsonCard() {
     }
   }
 
+  const handleAutoCreateBin = async () => {
+    const cleanKey = apiKey.trim()
+    if (!cleanKey) return toast.error('Please enter your JSONBin Master Key first')
+
+    setIsUploading(true)
+    try {
+      const result = await createJsonBin({ apiKey: cleanKey, data: state })
+      setBinUrl(result.binUrl)
+      localStorage.setItem('cloud_json_bin_url', result.binUrl)
+      localStorage.setItem('cloud_json_api_key', cleanKey)
+      setConnected(true)
+      await dispatchAndSave({
+        type: 'UPDATE_SETTINGS',
+        payload: {
+          cloudJson: { binUrl: result.binUrl, apiKey: cleanKey }
+        }
+      })
+      toast.success('New Bin automatically created & initialized with your portfolio!')
+    } catch (e) {
+      toast.error(e.message || 'Failed to auto-create bin')
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
   return (
     <div className="glass-card p-6 border-cyan-500/20 flex flex-col gap-5 mt-8" style={{ background: '#080d1a' }}>
       <div className="flex items-start justify-between gap-4">
@@ -213,40 +238,50 @@ function CloudJsonCard() {
 
       <div className="flex flex-col gap-4">
         <div>
+          <label className="text-xs font-semibold text-gray-300 block mb-1.5" htmlFor="cloud-api-key">
+            JSONBin Master Key (API Key)
+          </label>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input
+              id="cloud-api-key"
+              type="password"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              className="flex-1 bg-navy-950 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-gray-600 outline-none text-xs font-mono focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+            />
+            <button
+              onClick={handleAutoCreateBin}
+              disabled={isUploading}
+              className="btn-outline flex items-center justify-center gap-1.5 text-xs py-2 px-3 whitespace-nowrap"
+              style={{ borderColor: 'rgba(99, 102, 241, 0.4)', color: '#a5b4fc' }}
+            >
+              <Sparkles size={13} />
+              <span>{isUploading ? 'Creating...' : 'Auto-Create Bin in 1-Click'}</span>
+            </button>
+          </div>
+          <p className="text-[11px] text-gray-500 mt-1.5">
+            Get your free Master Key from{' '}
+            <a href="https://jsonbin.io/app/api-keys" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
+              jsonbin.io/app/api-keys ↗
+            </a>
+          </p>
+        </div>
+
+        <div>
           <label className="text-xs font-semibold text-gray-300 block mb-1.5" htmlFor="cloud-bin-url">
-            Cloud Bin URL
+            Cloud Bin URL or Bin ID
           </label>
           <input
             id="cloud-bin-url"
             type="text"
             value={binUrl}
             onChange={(e) => setBinUrl(e.target.value)}
-            placeholder="e.g. https://api.jsonbin.io/v3/b/66f8... or https://api.npoint.io/..."
-            className="w-full bg-navy-950 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-gray-600 outline-none text-xs font-mono focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
-          />
-        </div>
-
-        <div>
-          <label className="text-xs font-semibold text-gray-300 block mb-1.5" htmlFor="cloud-api-key">
-            API Key / Master Key (Optional for public bins)
-          </label>
-          <input
-            id="cloud-api-key"
-            type="password"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder="$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            placeholder="e.g. https://api.jsonbin.io/v3/b/66fa... or 66fa... or https://api.npoint.io/..."
             className="w-full bg-navy-950 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-gray-600 outline-none text-xs font-mono focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
           />
           <p className="text-[11px] text-gray-500 mt-1.5">
-            Need a free store? Sign up at{' '}
-            <a href="https://jsonbin.io" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
-              JSONBin.io ↗
-            </a>{' '}
-            or create a bin at{' '}
-            <a href="https://www.npoint.io" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
-              npoint.io ↗
-            </a>
+            Tip: If creating a bin manually on JSONBin's site, type <code className="text-cyan-400 font-mono font-bold">{}</code> in their editor before saving to avoid the &quot;Bin cannot be blank&quot; error.
           </p>
         </div>
       </div>
