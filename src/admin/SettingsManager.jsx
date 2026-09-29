@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Check } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
+import { fetchFromCloudJson, saveToCloudJson } from '../utils/cloudJson'
 import toast from 'react-hot-toast'
 
 export default function SettingsManager() {
@@ -96,6 +97,187 @@ export default function SettingsManager() {
           </button>
         </div>
       </div>
+
+      {/* Cloud JSON Store Configuration */}
+      <CloudJsonCard />
     </div>
   )
 }
+
+function CloudJsonCard() {
+  const { state, dispatchAndSave } = usePortfolio()
+  const initialBinUrl = localStorage.getItem('cloud_json_bin_url') || state?.settings?.cloudJson?.binUrl || ''
+  const initialApiKey = localStorage.getItem('cloud_json_api_key') || state?.settings?.cloudJson?.apiKey || ''
+
+  const [binUrl, setBinUrl] = useState(initialBinUrl)
+  const [apiKey, setApiKey] = useState(initialApiKey)
+  const [isUploading, setIsUploading] = useState(false)
+  const [isTesting, setIsTesting] = useState(false)
+  const [connected, setConnected] = useState(() => !!initialBinUrl)
+
+  const handleSaveConfig = async () => {
+    const cleanUrl = binUrl.trim()
+    const cleanKey = apiKey.trim()
+
+    if (!cleanUrl) {
+      localStorage.removeItem('cloud_json_bin_url')
+      localStorage.removeItem('cloud_json_api_key')
+      setConnected(false)
+      await dispatchAndSave({
+        type: 'UPDATE_SETTINGS',
+        payload: {
+          cloudJson: { binUrl: '', apiKey: '' }
+        }
+      })
+      toast.success('Cloud JSON sync disabled')
+      return
+    }
+
+    localStorage.setItem('cloud_json_bin_url', cleanUrl)
+    if (cleanKey) localStorage.setItem('cloud_json_api_key', cleanKey)
+    setConnected(true)
+
+    await dispatchAndSave({
+      type: 'UPDATE_SETTINGS',
+      payload: {
+        cloudJson: { binUrl: cleanUrl, apiKey: cleanKey }
+      }
+    })
+    toast.success('Cloud JSON configuration saved!')
+  }
+
+  const handleUploadCurrentData = async () => {
+    const cleanUrl = binUrl.trim()
+    const cleanKey = apiKey.trim()
+    if (!cleanUrl) return toast.error('Please enter your Cloud Bin URL first')
+
+    setIsUploading(true)
+    try {
+      await saveToCloudJson({
+        binUrl: cleanUrl,
+        apiKey: cleanKey,
+        data: state,
+      })
+      toast.success('Portfolio successfully published to Cloud JSON store!')
+      setConnected(true)
+    } catch (e) {
+      toast.error(e.message || 'Failed to upload to Cloud JSON')
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleTestConnection = async () => {
+    const cleanUrl = binUrl.trim()
+    const cleanKey = apiKey.trim()
+    if (!cleanUrl) return toast.error('Please enter a Cloud Bin URL')
+
+    setIsTesting(true)
+    try {
+      const data = await fetchFromCloudJson({ binUrl: cleanUrl, apiKey: cleanKey })
+      if (data && (data.skills || data.projects || data.experiences)) {
+        toast.success(`Connected! Found ${data.projects?.length || 0} projects and ${data.experiences?.length || 0} experiences in Cloud store.`)
+        setConnected(true)
+      } else {
+        toast.error('Connected to URL, but no valid portfolio data was found. Try clicking "Upload Current Data".')
+      }
+    } catch (e) {
+      toast.error(e.message || 'Connection failed')
+    } finally {
+      setIsTesting(false)
+    }
+  }
+
+  return (
+    <div className="glass-card p-6 border-cyan-500/20 flex flex-col gap-5 mt-8" style={{ background: '#080d1a' }}>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 className="text-base font-bold text-white">Cloud JSON Store (Zero-Backend Live Sync)</h3>
+            <span
+              className="text-[10px] font-mono uppercase px-2 py-0.5 rounded font-semibold"
+              style={{
+                background: connected ? 'rgba(34, 197, 94, 0.15)' : 'rgba(234, 179, 8, 0.15)',
+                color: connected ? '#4ade80' : '#facc15',
+                border: connected ? '1px solid rgba(34, 197, 94, 0.3)' : '1px solid rgba(234, 179, 8, 0.3)',
+              }}
+            >
+              {connected ? 'Active' : 'Not Configured'}
+            </span>
+          </div>
+          <p className="text-xs text-gray-400 mt-1">
+            Connect a cloud JSON endpoint (like <span className="text-cyan-400 font-mono">JSONBin.io</span> or <span className="text-cyan-400 font-mono">npoint.io</span>). Any edit you make in this Admin panel will automatically rewrite the cloud JSON file, keeping your live site updated <strong>instantly</strong> for visitors worldwide.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <div>
+          <label className="text-xs font-semibold text-gray-300 block mb-1.5" htmlFor="cloud-bin-url">
+            Cloud Bin URL
+          </label>
+          <input
+            id="cloud-bin-url"
+            type="text"
+            value={binUrl}
+            onChange={(e) => setBinUrl(e.target.value)}
+            placeholder="e.g. https://api.jsonbin.io/v3/b/66f8... or https://api.npoint.io/..."
+            className="w-full bg-navy-950 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-gray-600 outline-none text-xs font-mono focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs font-semibold text-gray-300 block mb-1.5" htmlFor="cloud-api-key">
+            API Key / Master Key (Optional for public bins)
+          </label>
+          <input
+            id="cloud-api-key"
+            type="password"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            placeholder="$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            className="w-full bg-navy-950 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-gray-600 outline-none text-xs font-mono focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+          />
+          <p className="text-[11px] text-gray-500 mt-1.5">
+            Need a free store? Sign up at{' '}
+            <a href="https://jsonbin.io" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
+              JSONBin.io ↗
+            </a>{' '}
+            or create a bin at{' '}
+            <a href="https://www.npoint.io" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
+              npoint.io ↗
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div className="pt-3 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={handleSaveConfig}
+            className="btn-primary py-2 px-4 text-xs font-semibold"
+          >
+            Save Configuration
+          </button>
+          <button
+            onClick={handleUploadCurrentData}
+            disabled={isUploading}
+            className="btn-outline py-2 px-4 text-xs font-semibold flex items-center gap-1.5"
+            style={{ borderColor: 'rgba(14, 165, 233, 0.4)', color: '#38bdf8' }}
+          >
+            {isUploading ? 'Uploading Data...' : 'Upload Current Data to Cloud'}
+          </button>
+        </div>
+
+        <button
+          onClick={handleTestConnection}
+          disabled={isTesting}
+          className="text-xs text-gray-400 hover:text-white underline py-1 px-2"
+        >
+          {isTesting ? 'Testing...' : 'Test Connection'}
+        </button>
+      </div>
+    </div>
+  )
+}
+

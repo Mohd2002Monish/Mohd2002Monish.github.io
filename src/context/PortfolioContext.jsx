@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect, useState } from 'react'
 import defaultData from '../data/portfolio-data.json'
+import { fetchFromCloudJson, saveToCloudJson } from '../utils/cloudJson'
 
 const PortfolioContext = createContext(null)
 
@@ -42,6 +43,12 @@ export function PortfolioProvider({ children }) {
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
 
+  const getCloudConfig = () => {
+    const binUrl = localStorage.getItem('cloud_json_bin_url') || state?.settings?.cloudJson?.binUrl || defaultData?.settings?.cloudJson?.binUrl
+    const apiKey = localStorage.getItem('cloud_json_api_key') || state?.settings?.cloudJson?.apiKey || defaultData?.settings?.cloudJson?.apiKey
+    return { binUrl, apiKey }
+  }
+
   // Clear any legacy localStorage data caches
   useEffect(() => {
     try {
@@ -50,20 +57,30 @@ export function PortfolioProvider({ children }) {
   }, [])
 
   const fetchLatestData = async () => {
-    if (!IS_DEV) {
-      setLoading(false)
-      return
-    }
-    try {
-      const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
-      if (res.ok) {
-        const data = await res.json()
-        dispatch({ type: 'SET_DATA', payload: data })
+    if (IS_DEV) {
+      try {
+        const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
+        if (res.ok) {
+          const data = await res.json()
+          dispatch({ type: 'SET_DATA', payload: data })
+          return
+        }
+      } catch (e) {
+        console.warn('Could not fetch local portfolio data:', e)
       }
-    } catch (e) {
-      console.warn('Could not fetch portfolio data:', e)
-    } finally {
-      setLoading(false)
+    }
+
+    // In production or dev fallback: fetch from Cloud JSON Store if configured
+    const { binUrl, apiKey } = getCloudConfig()
+    if (binUrl) {
+      try {
+        const cloudData = await fetchFromCloudJson({ binUrl, apiKey })
+        if (cloudData) {
+          dispatch({ type: 'SET_DATA', payload: cloudData })
+        }
+      } catch (e) {
+        console.warn('Could not fetch from Cloud JSON store:', e)
+      }
     }
   }
 
@@ -133,6 +150,19 @@ export function PortfolioProvider({ children }) {
         })
       } catch (e) {
         console.error('Failed to save to disk:', e)
+      } finally {
+        setSaving(false)
+      }
+    }
+
+    // 3. Centralized Cloud Rewrite: If Cloud JSON Bin is configured, rewrite the remote file
+    const { binUrl, apiKey } = getCloudConfig()
+    if (binUrl) {
+      setSaving(true)
+      try {
+        await saveToCloudJson({ binUrl, apiKey, data: newState })
+      } catch (e) {
+        console.error('Failed to rewrite Cloud JSON store:', e)
       } finally {
         setSaving(false)
       }
