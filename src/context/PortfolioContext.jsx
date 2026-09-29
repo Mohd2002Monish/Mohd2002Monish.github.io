@@ -36,25 +36,50 @@ export const resolveImageUrl = (img) => {
   return img
 }
 
+function getInitialData() {
+  try {
+    const saved = localStorage.getItem('portfolio_custom_data')
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      if (parsed && typeof parsed === 'object' && parsed.experiences) {
+        return parsed
+      }
+    }
+  } catch (e) {}
+  return defaultData
+}
+
 export function PortfolioProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, defaultData)
+  const [state, dispatch] = useReducer(reducer, defaultData, getInitialData)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
   const fetchLatestData = async () => {
-    if (!IS_DEV) {
-      setLoading(false)
-      return
-    }
-    try {
-      const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
-      if (res.ok) {
-        const data = await res.json()
-        dispatch({ type: 'SET_DATA', payload: data })
+    if (IS_DEV) {
+      try {
+        const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
+        if (res.ok) {
+          const data = await res.json()
+          dispatch({ type: 'SET_DATA', payload: data })
+          try {
+            localStorage.setItem('portfolio_custom_data', JSON.stringify(data))
+          } catch (e) {}
+        }
+      } catch (e) {
+        console.warn('Could not fetch portfolio data:', e)
+      } finally {
+        setLoading(false)
       }
-    } catch (e) {
-      console.warn('Could not fetch portfolio data:', e)
-    } finally {
+    } else {
+      try {
+        const saved = localStorage.getItem('portfolio_custom_data')
+        if (saved) {
+          const parsed = JSON.parse(saved)
+          if (parsed && parsed.experiences) {
+            dispatch({ type: 'SET_DATA', payload: parsed })
+          }
+        }
+      } catch (e) {}
       setLoading(false)
     }
   }
@@ -104,28 +129,37 @@ export function PortfolioProvider({ children }) {
   }, [])
 
   const saveToFile = async (newState) => {
-    if (!IS_DEV) return
-    setSaving(true)
+    // 1. Always persist to localStorage so edits are never lost
     try {
-      await fetch('/api/portfolio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newState, null, 2),
-      })
-
-      // Notify other open tabs (e.g. portfolio tab) in real-time
-      try {
-        if (typeof BroadcastChannel !== 'undefined') {
-          const ch = new BroadcastChannel('portfolio_sync_channel')
-          ch.postMessage({ type: 'SYNC_DATA', payload: newState })
-          ch.close()
-        }
-      } catch (e) {}
-      localStorage.setItem('portfolio_data_sync', Date.now().toString())
+      localStorage.setItem('portfolio_custom_data', JSON.stringify(newState))
     } catch (e) {
-      console.error('Failed to save:', e)
-    } finally {
-      setSaving(false)
+      console.warn('Could not save to localStorage:', e)
+    }
+
+    // 2. Broadcast to other open tabs in real-time
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        const ch = new BroadcastChannel('portfolio_sync_channel')
+        ch.postMessage({ type: 'SYNC_DATA', payload: newState })
+        ch.close()
+      }
+    } catch (e) {}
+    localStorage.setItem('portfolio_data_sync', Date.now().toString())
+
+    // 3. In dev mode, write to disk via Vite server middleware
+    if (IS_DEV) {
+      setSaving(true)
+      try {
+        await fetch('/api/portfolio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newState, null, 2),
+        })
+      } catch (e) {
+        console.error('Failed to save to disk:', e)
+      } finally {
+        setSaving(false)
+      }
     }
   }
 
