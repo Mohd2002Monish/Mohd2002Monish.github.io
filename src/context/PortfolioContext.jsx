@@ -36,50 +36,33 @@ export const resolveImageUrl = (img) => {
   return img
 }
 
-function getInitialData() {
-  try {
-    const saved = localStorage.getItem('portfolio_custom_data')
-    if (saved) {
-      const parsed = JSON.parse(saved)
-      if (parsed && typeof parsed === 'object' && parsed.experiences) {
-        return parsed
-      }
-    }
-  } catch (e) {}
-  return defaultData
-}
-
 export function PortfolioProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, defaultData, getInitialData)
-  const [loading, setLoading] = useState(true)
+  // Always use defaultData from portfolio-data.json as the single source of truth
+  const [state, dispatch] = useReducer(reducer, defaultData)
+  const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
 
+  // Clear any legacy localStorage data caches that would override portfolio-data.json
+  useEffect(() => {
+    try {
+      localStorage.removeItem('portfolio_custom_data')
+    } catch (e) {}
+  }, [])
+
   const fetchLatestData = async () => {
-    if (IS_DEV) {
-      try {
-        const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
-        if (res.ok) {
-          const data = await res.json()
-          dispatch({ type: 'SET_DATA', payload: data })
-          try {
-            localStorage.setItem('portfolio_custom_data', JSON.stringify(data))
-          } catch (e) {}
-        }
-      } catch (e) {
-        console.warn('Could not fetch portfolio data:', e)
-      } finally {
-        setLoading(false)
+    if (!IS_DEV) {
+      setLoading(false)
+      return
+    }
+    try {
+      const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
+      if (res.ok) {
+        const data = await res.json()
+        dispatch({ type: 'SET_DATA', payload: data })
       }
-    } else {
-      try {
-        const saved = localStorage.getItem('portfolio_custom_data')
-        if (saved) {
-          const parsed = JSON.parse(saved)
-          if (parsed && parsed.experiences) {
-            dispatch({ type: 'SET_DATA', payload: parsed })
-          }
-        }
-      } catch (e) {}
+    } catch (e) {
+      console.warn('Could not fetch portfolio data:', e)
+    } finally {
       setLoading(false)
     }
   }
@@ -129,14 +112,7 @@ export function PortfolioProvider({ children }) {
   }, [])
 
   const saveToFile = async (newState) => {
-    // 1. Always persist to localStorage so edits are never lost
-    try {
-      localStorage.setItem('portfolio_custom_data', JSON.stringify(newState))
-    } catch (e) {
-      console.warn('Could not save to localStorage:', e)
-    }
-
-    // 2. Broadcast to other open tabs in real-time
+    // 1. Broadcast to other open tabs in real-time
     try {
       if (typeof BroadcastChannel !== 'undefined') {
         const ch = new BroadcastChannel('portfolio_sync_channel')
@@ -146,7 +122,7 @@ export function PortfolioProvider({ children }) {
     } catch (e) {}
     localStorage.setItem('portfolio_data_sync', Date.now().toString())
 
-    // 3. In dev mode, write to disk via Vite server middleware
+    // 2. In dev mode, write directly to src/data/portfolio-data.json on disk
     if (IS_DEV) {
       setSaving(true)
       try {
