@@ -276,10 +276,18 @@
   ],
   "experiences": [
     {
+      "company": "Scloudin",
+      "role": "Backend Engineer",
+      "duration": "Present",
+      "year": "09 Feb 2025 - Present",
+      "description": "TECH STACK :\nNode.js, Express.js, MongoDB, PostgreSQL, Redis, REST APIs, Docker, AWS\n-Engineered robust backend systems, scalable microservices, and RESTful APIs for key client platforms: WhiteAds, Tenantify, StayNOVA, Meerai, RISM, GateKeeper, and TextExtract.\n-Architected multi-tenant database schemas and role-based access control (RBAC) ensuring enterprise-grade data isolation and security.\n-Developed automated OCR processing pipelines in TextExtract for rapid, high-accuracy document parsing and text recognition.\n-Built visitor access-management workflows and real-time security gate logging engines for GateKeeper.\n-Optimized query indexing, caching strategies, and API latency across high-throughput rental and inventory modules for Tenantify and StayNOVA.\n-Implemented third-party integrations, webhook listeners, payment processing, and cloud deployment pipelines.",
+      "id": "1779557300000"
+    },
+    {
       "company": "Empiric Infotech LLP",
-      "role": "Full Stack MERN Developer (Full-time)",
-      "duration": "1 Year",
-      "year": "12/2024 - Present",
+      "role": "Full Stack MERN Developer",
+      "duration": "3 Months",
+      "year": "12/2024 - 02/2025",
       "description": "-Built and maintained Admin Panel and User Panel using React.js with responsive and scalable UI components.\n-Led the end-to-end design and development of an AI-powered Applicant Tracking System (ATS) from scratch.\n-Designed and developed RESTful APIs using Node.js and Express.js to support core application workflows.\n-Implemented microservices-based backend architecture to improve scalability, performance, and maintainability.\n-Integrated AI-driven features using ChatGPT API to automate candidate screening, communication, and workflow intelligence.\n-Designed and automated complex business workflows using n8n, reducing manual operations and improving system efficiency.\n-Implemented Elasticsearch for advanced search, filtering, and high-performance data retrieval.\n-Containerized services using Docker and deployed applications on DigitalOcean with production-ready configurations.\n-Managed Cloudflare for DNS, security, and performance optimization.",
       "id": "1779557136160"
     },
