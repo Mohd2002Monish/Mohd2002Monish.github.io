@@ -3,6 +3,7 @@ import { motion, AnimatePresence, Reorder } from 'framer-motion'
 import { Plus, Pencil, Trash2, Check, X, Image, GripVertical } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
 import toast from 'react-hot-toast'
+import { resolveIconUrl } from '../components/Skills'
 
 const levels = ['Expert', 'Advanced', 'Intermediate']
 const empty = { name: '', icon: '', level: 'Intermediate' }
@@ -113,7 +114,7 @@ export default function SkillsManager() {
                   </div>
                   <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center">
                     {skill.icon ? (
-                      <img src={skill.icon} alt={skill.name} className="w-9 h-9 object-contain" />
+                      <img src={resolveIconUrl(skill.icon)} alt={skill.name} className="w-9 h-9 object-contain" />
                     ) : (
                       <div className="w-9 h-9 rounded-lg bg-violet-600/20 flex items-center justify-center text-violet-400 font-bold">
                         {skill.name.charAt(0)}

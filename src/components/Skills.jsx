@@ -26,6 +26,15 @@ function LevelMeter({ level }) {
   )
 }
 
+export const resolveIconUrl = (icon) => {
+  if (!icon) return ''
+  if (icon.startsWith('/') && !icon.startsWith('//')) {
+    const base = import.meta.env.BASE_URL || '/'
+    return `${base.replace(/\/$/, '')}${icon}`
+  }
+  return icon
+}
+
 function SkillCell({ skill, index }) {
   return (
     <motion.div
@@ -39,7 +48,7 @@ function SkillCell({ skill, index }) {
       <div className="flex items-start justify-between">
         <div className="w-9 h-9 flex items-center justify-center">
           <img
-            src={skill.icon}
+            src={resolveIconUrl(skill.icon)}
             alt={skill.name}
             className="x-skill-icon w-8 h-8 object-contain"
             loading="lazy"

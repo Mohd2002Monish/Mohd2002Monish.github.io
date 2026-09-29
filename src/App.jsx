@@ -17,6 +17,7 @@ import Footer from './components/Footer'
 
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
+import AllProjects from './pages/AllProjects'
 
 function Portfolio() {
   return (
@@ -72,6 +73,7 @@ export default function App() {
         />
         <Routes>
           <Route path="/" element={<Portfolio />} />
+          <Route path="/projects" element={<AllProjects />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminGuard />} />
           <Route path="*" element={<Navigate to="/" replace />} />

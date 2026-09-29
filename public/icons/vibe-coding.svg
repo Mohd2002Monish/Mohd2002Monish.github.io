@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <linearGradient id="vibe-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F43F5E" />
+      <stop offset="50%" stop-color="#A855F7" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+    <linearGradient id="vibe-neon" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+    <filter id="vibe-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Rounded Tech Badge -->
+  <rect x="18" y="18" width="92" height="92" rx="24" fill="#0c0d18" stroke="url(#vibe-grad)" stroke-width="4" />
+
+  <!-- Code Bracket Left < -->
+  <path d="M42 46 L30 64 L42 82" fill="none" stroke="url(#vibe-grad)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Code Bracket Right > -->
+  <path d="M86 46 L98 64 L86 82" fill="none" stroke="url(#vibe-grad)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Flowing Slash / Vibe Beam -->
+  <path d="M72 40 L56 88" fill="none" stroke="url(#vibe-neon)" stroke-width="5.5" stroke-linecap="round" opacity="0.65" />
+
+  <!-- Super Vibe AI Sparkle / Star 1 (Center-Right) -->
+  <path d="M64 42 C64 50 67 53 75 53 C67 53 64 56 64 64 C64 56 61 53 53 53 C61 53 64 50 64 42 Z"
+        fill="url(#vibe-neon)" filter="url(#vibe-glow)" />
+
+  <!-- Secondary Sparkle (Upper Right) -->
+  <path d="M96 24 C96 28 97.5 29.5 101.5 29.5 C97.5 29.5 96 31 96 35 C96 31 94.5 29.5 90.5 29.5 C94.5 29.5 96 28 96 24 Z"
+        fill="#38BDF8" filter="url(#vibe-glow)" />
+
+  <!-- Mini Sparkle (Bottom Left) -->
+  <path d="M30 92 C30 95 31 96 34 96 C31 96 30 97 30 100 C30 97 29 96 26 96 C29 96 30 95 30 92 Z"
+        fill="#F43F5E" />
+
+  <!-- Central Glow Orb -->
+  <circle cx="64" cy="53" r="2" fill="#ffffff" />
+</svg>

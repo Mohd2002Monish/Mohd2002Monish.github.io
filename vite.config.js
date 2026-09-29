@@ -53,12 +53,12 @@ function portfolioDataPlugin() {
   }
 }
 
-export default defineConfig({
-  base: '/dev-monish-portfolio/',
+export default defineConfig(({ command }) => ({
+  base: command === 'serve' ? '/' : '/dev-monish-portfolio/',
   plugins: [react(), portfolioDataPlugin()],
   server: {
     watch: {
       ignored: ['**/src/data/portfolio-data.json'],
     },
   },
-})
+}))

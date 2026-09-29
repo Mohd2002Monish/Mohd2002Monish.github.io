@@ -15,7 +15,8 @@ const rise = (delay = 0) => ({
 
 const ticker = [
   'React', 'Node.js', 'MongoDB', 'Express', 'Next.js', 'TypeScript',
-  'Tailwind CSS', 'Docker', 'AWS', 'Elasticsearch', 'REST APIs', 'Redux',
+  'Tailwind CSS', 'AI Automation', 'Vibe Coding', 'Docker', 'AWS',
+  'Elasticsearch', 'REST APIs', 'Redux',
 ]
 
 export default function Hero() {
@@ -121,7 +122,7 @@ export default function Hero() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 py-6">
             {[
               { k: 'Location', v: 'India — Remote' },
-              { k: 'Experience', v: '3+ Years' },
+              { k: 'Experience', v: '3.5+ Years' },
               { k: 'Currently', v: 'Empiric Infotech' },
               { k: 'Focus', v: 'Full-Stack / AI' },
             ].map(({ k, v }) => (

@@ -59,6 +59,9 @@ function spawnComet(w, h, cfg) {
     y = Math.random() * h * 0.6
   }
 
+  // Explode target based on distance traveled (percentage of viewport dimension)
+  const explodeDistance = Math.min(w, h) * (0.2 + Math.random() * 0.45)
+
   return {
     x, y,
     vx: Math.cos(angle) * speed,
@@ -67,25 +70,13 @@ function spawnComet(w, h, cfg) {
     headR,
     palette,
     alpha: 0,
+    exploded: false,
     fadingOut: false,
+    explodeDistance,
+    distanceTraveled: 0,
     trail: [],
-    sparks: [],
+    ripples: null,
     dead: false,
-  }
-}
-
-function spawnSparks(comet, sparkCount) {
-  const count = Math.max(3, Math.round(sparkCount * (0.6 + Math.random() * 0.8)))
-  for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI * 2
-    const spd   = 1.5 + Math.random() * 3.5
-    comet.sparks.push({
-      x: comet.x, y: comet.y,
-      vx: Math.cos(angle) * spd,
-      vy: Math.sin(angle) * spd + 0.5,
-      life: 0.8 + Math.random() * 0.5,
-      size: 1 + Math.random() * 2,
-    })
   }
 }
 
@@ -131,23 +122,26 @@ export default function StarfieldBackground() {
 
     const drawComet = (c) => {
       if (c.dead) return
-      const { x, y, headR, alpha, palette, trail, sparks } = c
+      const { x, y, headR, alpha, palette, trail, exploded, ripples, explodeX, explodeY } = c
 
-      // Glowing head
-      const headGlow = ctx.createRadialGradient(x, y, 0, x, y, headR * 5)
-      headGlow.addColorStop(0,   palette.head + `${alpha * 0.95})`)
-      headGlow.addColorStop(0.4, palette.head + `${alpha * 0.5})`)
-      headGlow.addColorStop(1,   palette.head + '0)')
-      ctx.beginPath()
-      ctx.arc(x, y, headR * 5, 0, Math.PI * 2)
-      ctx.fillStyle = headGlow
-      ctx.fill()
+      // Only draw the head if it has not exploded yet
+      if (!exploded) {
+        // Glowing head
+        const headGlow = ctx.createRadialGradient(x, y, 0, x, y, headR * 5)
+        headGlow.addColorStop(0,   palette.head + `${alpha * 0.95})`)
+        headGlow.addColorStop(0.4, palette.head + `${alpha * 0.5})`)
+        headGlow.addColorStop(1,   palette.head + '0)')
+        ctx.beginPath()
+        ctx.arc(x, y, headR * 5, 0, Math.PI * 2)
+        ctx.fillStyle = headGlow
+        ctx.fill()
 
-      // Bright core dot
-      ctx.beginPath()
-      ctx.arc(x, y, headR, 0, Math.PI * 2)
-      ctx.fillStyle = palette.head + `${alpha})`
-      ctx.fill()
+        // Bright core dot
+        ctx.beginPath()
+        ctx.arc(x, y, headR, 0, Math.PI * 2)
+        ctx.fillStyle = palette.head + `${alpha})`
+        ctx.fill()
+      }
 
       // Tail
       if (trail.length > 1) {
@@ -163,13 +157,26 @@ export default function StarfieldBackground() {
         }
       }
 
-      // Sparks
-      for (const sp of sparks) {
-        if (sp.life <= 0) continue
-        ctx.beginPath()
-        ctx.arc(sp.x, sp.y, sp.size * sp.life, 0, Math.PI * 2)
-        ctx.fillStyle = palette.spark + `${sp.life * alpha * 0.9})`
-        ctx.fill()
+      // Circular water ripples (expanding orange wave)
+      if (exploded && ripples) {
+        const orangeColor = themeRef.current === 'light' ? 'rgba(224, 67, 0,' : 'rgba(255, 92, 26,'
+        for (const rip of ripples) {
+          if (rip.radius > 0 && rip.alpha > 0) {
+            ctx.beginPath()
+            ctx.arc(explodeX, explodeY, rip.radius, 0, Math.PI * 2)
+            ctx.strokeStyle = orangeColor + `${rip.alpha * 0.8})`
+            ctx.lineWidth = rip.weight * rip.alpha + 0.4
+            ctx.stroke()
+
+            // Add a subtle expanding water ripple color fill
+            if (rip.weight > 2.0) {
+              ctx.beginPath()
+              ctx.arc(explodeX, explodeY, rip.radius, 0, Math.PI * 2)
+              ctx.fillStyle = orangeColor + `${rip.alpha * 0.05})`
+              ctx.fill()
+            }
+          }
+        }
       }
     }
 
@@ -217,34 +224,59 @@ export default function StarfieldBackground() {
       comets = comets.filter(c => !c.dead)
 
       for (const c of comets) {
-        c.x += c.vx
-        c.y += c.vy
+        if (!c.exploded) {
+          c.x += c.vx
+          c.y += c.vy
+          c.distanceTraveled += Math.hypot(c.vx, c.vy)
 
-        c.trail.push({ x: c.x, y: c.y })
-        const maxTrail = Math.ceil(c.tailLen / Math.hypot(c.vx, c.vy))
-        if (c.trail.length > maxTrail) c.trail.shift()
+          c.trail.push({ x: c.x, y: c.y })
+          const maxTrail = Math.ceil(c.tailLen / Math.hypot(c.vx, c.vy))
+          if (c.trail.length > maxTrail) c.trail.shift()
 
-        if (!c.fadingOut) c.alpha = Math.min(1, c.alpha + 0.05)
+          c.alpha = Math.min(1, c.alpha + 0.05)
 
-        const margin = c.tailLen + 50
-        if (c.x > w + margin || c.y > h + margin || c.x < -margin) {
-          if (!c.fadingOut) {
+          // Firecracker trigger condition: reaches its random explode distance
+          const reachedDistance = c.distanceTraveled >= c.explodeDistance
+          const hitBoundary = c.x > w + 20 || c.y > h + 20 || c.x < -20
+
+          if (reachedDistance || hitBoundary) {
+            c.exploded = true
             c.fadingOut = true
-            if (cfg.sparkEnabled) spawnSparks(c, cfg.sparkCount)
+            c.explodeX = c.x
+            c.explodeY = c.y
+            if (cfg.sparkEnabled) {
+              // Create expanding concentric water ripples
+              c.ripples = [
+                { radius: 0, maxRadius: 65, speed: 2.2, alpha: 1.0, weight: 2.2 },
+                { radius: -8, maxRadius: 52, speed: 2.0, alpha: 0.8, weight: 1.5 },
+                { radius: -16, maxRadius: 40, speed: 1.8, alpha: 0.6, weight: 1.0 }
+              ]
+            }
           }
-          c.alpha -= 0.04
-          if (c.alpha <= 0) { c.dead = true; continue }
+        } else {
+          // If exploded, fade out the trail gradually
+          if (c.trail.length > 0) {
+            c.trail.shift()
+          }
         }
 
-        for (const sp of c.sparks) {
-          sp.x  += sp.vx
-          sp.y  += sp.vy
-          sp.vy += 0.08
-          sp.vx *= 0.97
-          sp.life -= 0.03
+        let ripplesAlive = false
+        if (c.exploded && c.ripples) {
+          for (const rip of c.ripples) {
+            rip.radius += rip.speed
+            if (rip.radius > 0) {
+              rip.alpha = Math.max(0, 1 - (rip.radius / rip.maxRadius))
+            }
+            if (rip.alpha > 0 && rip.radius < rip.maxRadius) ripplesAlive = true
+          }
         }
 
-        drawComet(c)
+        // Dead when exploded AND no ripples left AND trail is fully gone
+        if (c.exploded && (!c.ripples || !ripplesAlive) && c.trail.length === 0) {
+          c.dead = true
+        } else {
+          drawComet(c)
+        }
       }
 
       raf = requestAnimationFrame(draw)

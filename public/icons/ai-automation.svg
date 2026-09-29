@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <linearGradient id="ai-grad-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4" />
+      <stop offset="50%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <linearGradient id="ai-grad-accent" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+    <filter id="ai-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Central Chip Body -->
+  <rect x="36" y="36" width="56" height="56" rx="14" fill="url(#ai-grad-primary)" />
+  <rect x="42" y="42" width="44" height="44" rx="10" fill="#0b0f19" />
+
+  <!-- Processor Core / AI Brain Spark -->
+  <path d="M64 48 L67 58 L77 61 L67 64 L64 74 L61 64 L51 61 L61 58 Z" fill="url(#ai-grad-primary)" filter="url(#ai-glow)" />
+  <circle cx="64" cy="61" r="3" fill="#ffffff" />
+
+  <!-- Automation Orbit / Workflow Rings -->
+  <!-- Upper Right Flow -->
+  <path d="M84 40 C98 48 106 64 104 80" fill="none" stroke="url(#ai-grad-primary)" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 6" />
+  <polygon points="104,86 109,76 99,78" fill="#8B5CF6" />
+
+  <!-- Lower Left Flow -->
+  <path d="M44 88 C30 80 22 64 24 48" fill="none" stroke="url(#ai-grad-accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 6" />
+  <polygon points="24,42 19,52 29,50" fill="#06B6D4" />
+
+  <!-- Connection Pins / Nodes -->
+  <!-- Top Pins -->
+  <line x1="50" y1="24" x2="50" y2="36" stroke="#06B6D4" stroke-width="4" stroke-linecap="round" />
+  <line x1="64" y1="20" x2="64" y2="36" stroke="#3B82F6" stroke-width="4" stroke-linecap="round" />
+  <line x1="78" y1="24" x2="78" y2="36" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round" />
+
+  <!-- Bottom Pins -->
+  <line x1="50" y1="92" x2="50" y2="104" stroke="#10B981" stroke-width="4" stroke-linecap="round" />
+  <line x1="64" y1="92" x2="64" y2="108" stroke="#06B6D4" stroke-width="4" stroke-linecap="round" />
+  <line x1="78" y1="92" x2="78" y2="104" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round" />
+
+  <!-- Left Pins -->
+  <line x1="24" y1="50" x2="36" y2="50" stroke="#06B6D4" stroke-width="4" stroke-linecap="round" />
+  <line x1="24" y1="78" x2="36" y2="78" stroke="#10B981" stroke-width="4" stroke-linecap="round" />
+
+  <!-- Right Pins -->
+  <line x1="92" y1="50" x2="104" y2="50" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round" />
+  <line x1="92" y1="78" x2="104" y2="78" stroke="#3B82F6" stroke-width="4" stroke-linecap="round" />
+
+  <!-- Node Dots -->
+  <circle cx="50" cy="22" r="3" fill="#06B6D4" />
+  <circle cx="64" cy="18" r="3.5" fill="#3B82F6" />
+  <circle cx="78" cy="22" r="3" fill="#8B5CF6" />
+  <circle cx="50" cy="106" r="3" fill="#10B981" />
+  <circle cx="64" cy="110" r="3.5" fill="#06B6D4" />
+  <circle cx="78" cy="106" r="3" fill="#8B5CF6" />
+</svg>

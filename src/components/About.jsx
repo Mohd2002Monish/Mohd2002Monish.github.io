@@ -21,7 +21,7 @@ export default function About() {
     { k: 'Name', v: 'Mohd Monish' },
     { k: 'Role', v: 'Full-Stack MERN Developer' },
     { k: 'Location', v: 'India / Remote' },
-    { k: 'Experience', v: '3+ Years' },
+    { k: 'Experience', v: '3.5+ Years' },
     { k: 'Status', v: 'Open to work', accent: true },
     { k: 'Email', v: about.email, href: `mailto:${about.email}` },
   ]

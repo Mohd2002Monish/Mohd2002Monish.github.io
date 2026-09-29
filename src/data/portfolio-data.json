@@ -87,54 +87,94 @@
       "name": "REST API",
       "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg",
       "level": "Advanced"
+    },
+    {
+      "id": "15",
+      "name": "AI Automation",
+      "icon": "/icons/ai-automation.svg",
+      "level": "Advanced"
+    },
+    {
+      "id": "16",
+      "name": "Vibe Coding",
+      "icon": "/icons/vibe-coding.svg",
+      "level": "Advanced"
     }
   ],
   "projects": [
     {
-      "id": "2",
-      "title": "KFC Clone",
-      "image": "https://opengraph.githubassets.com/1/H-unique245/axiomatic-trouble-8860",
+      "id": "1",
+      "title": "MERN Real-Time Chat App",
+      "image": "",
       "stack": [
         "React",
-        "CSS",
-        "Redux",
-        "Firebase",
         "Node.js",
         "Express",
-        "MongoDB"
+        "MongoDB",
+        "Socket.io",
+        "Tailwind CSS"
       ],
-      "description": "A full-stack collaborative project at Masai School. Goal was to create a full-stack clone of the KFC website as close as possible. Built by a team of 4 developers in 5 days.",
-      "liveUrl": "https://axiomatic-trouble-8860-38bfe.web.app/cart",
-      "githubUrl": "https://github.com/H-unique245/axiomatic-trouble-8860"
+      "description": "Full-stack real-time chat application featuring instant 1-on-1 and group messaging, active user presence, secure JWT authentication, and responsive modern interface.",
+      "liveUrl": "",
+      "githubUrl": "https://github.com/Mohd2002Monish/chat-app-MERN"
     },
     {
-      "id": "1",
-      "title": "MedsPharma",
-      "image": "https://user-images.githubusercontent.com/94745544/199207187-1605a618-2e09-4112-90b0-b752d9d53495.png",
+      "id": "2",
+      "title": "Headless CMS Engine",
+      "image": "",
       "stack": [
         "Next.js",
-        "Firebase",
+        "React",
         "Node.js",
-        "Express",
+        "REST API",
         "MongoDB"
       ],
-      "description": "MedsPharma is a consumer healthcare online-app that provides customers on-demand access to all products and lets them purchase according to their needs.",
-      "liveUrl": "https://medspharma.netlify.app/",
-      "githubUrl": "https://github.com/AkashPanda1701/jagged-walk-7134"
+      "description": "Modern headless content management system built with Next.js, featuring dynamic schema configuration, multi-role publishing workflows, and high-performance API distribution.",
+      "liveUrl": "",
+      "githubUrl": "https://github.com/Mohd2002Monish/new-cms"
     },
     {
       "id": "3",
-      "title": "Meesho Clone",
-      "image": "https://opengraph.githubassets.com/1/prakash817/meesho",
+      "title": "Job Application & Tracker",
+      "image": "",
       "stack": [
-        "HTML",
+        "React",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "Redux"
+      ],
+      "description": "Comprehensive job application pipeline tracker designed to manage interviews, company stages, resume assets, and candidate milestones in an interactive dashboard.",
+      "liveUrl": "",
+      "githubUrl": "https://github.com/Mohd2002Monish/Job-apply"
+    },
+    {
+      "id": "4",
+      "title": "Grabit Coin Rewards System",
+      "image": "",
+      "stack": [
+        "React",
+        "JavaScript",
+        "Node.js",
+        "REST API"
+      ],
+      "description": "Tokenized digital loyalty rewards and redemption dashboard providing real-time coin balances, transaction histories, and gamified redemption flows.",
+      "liveUrl": "",
+      "githubUrl": "https://github.com/Mohd2002Monish/grabit-coin"
+    },
+    {
+      "id": "5",
+      "title": "Artisanal Soap Shop",
+      "image": "",
+      "stack": [
+        "React",
         "CSS",
         "JavaScript",
         "REST API"
       ],
-      "description": "A clone of meesho.com providing online shopping for a wide variety of clothes and electronic products. Led the team as project manager and main contributor.",
-      "liveUrl": "https://thriving-crostata-7798c0.netlify.app/",
-      "githubUrl": "https://github.com/prakash817/meesho"
+      "description": "Artisanal and organic e-commerce storefront with interactive product catalog browsing, cart management, category filters, and smooth checkout flow.",
+      "liveUrl": "",
+      "githubUrl": "https://github.com/Mohd2002Monish/soap-shop"
     }
   ],
   "experiences": [
@@ -172,7 +212,7 @@
     }
   ],
   "about": {
-    "bio": "I am Mohd Monish and I am a full-stack MERN Developer. Since childhood, I have always been excited to work on computers. After passing my intermediate examination, I decided to take up software development. During the pandemic, I decided to learn coding on my own and that is how I figured out my passion for this field, after which I joined a coding bootcamp and began my journey toward becoming a Full Stack Web Developer.",
+    "bio": "I’m Mohd Monish, a Full-Stack MERN Developer with 3.5+ years of experience taking ideas from a blank canvas to high-performance, production-ready products. What started as late-night curiosity during the pandemic quickly turned into an obsession with how software really works under the hood. Today, I build across the entire stack—crafting fluid React interfaces, architecting resilient Node.js backends, integrating AI workflows, and shipping systems that feel intuitive, fast, and built to last.",
     "github": "https://github.com/Mohd2002Monish",
     "linkedin": "https://www.linkedin.com/in/mohd2002monish/",
     "instagram": "https://www.instagram.com/mohdmonish__/",
