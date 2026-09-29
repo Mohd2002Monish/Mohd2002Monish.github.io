@@ -26,22 +26,80 @@ function reducer(state, action) {
   }
 }
 
+export const resolveImageUrl = (img) => {
+  if (!img) return ''
+  if (img.startsWith('data:') || img.startsWith('http://') || img.startsWith('https://')) return img
+  if (img.startsWith('/') && !img.startsWith('//')) {
+    const base = import.meta.env.BASE_URL || '/'
+    return `${base.replace(/\/$/, '')}${img}`
+  }
+  return img
+}
+
 export function PortfolioProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, defaultData)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => {
-    if (IS_DEV) {
-      fetch('/api/portfolio')
-        .then(r => r.json())
-        .then(data => {
-          dispatch({ type: 'SET_DATA', payload: data })
-          setLoading(false)
-        })
-        .catch(() => setLoading(false))
-    } else {
+  const fetchLatestData = async () => {
+    if (!IS_DEV) {
       setLoading(false)
+      return
+    }
+    try {
+      const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
+      if (res.ok) {
+        const data = await res.json()
+        dispatch({ type: 'SET_DATA', payload: data })
+      }
+    } catch (e) {
+      console.warn('Could not fetch portfolio data:', e)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchLatestData()
+
+    // Cross-tab real-time sync via BroadcastChannel
+    let channel = null
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        channel = new BroadcastChannel('portfolio_sync_channel')
+        channel.onmessage = (event) => {
+          if (event.data?.type === 'SYNC_DATA') {
+            if (event.data.payload) {
+              dispatch({ type: 'SET_DATA', payload: event.data.payload })
+            } else {
+              fetchLatestData()
+            }
+          }
+        }
+      }
+    } catch (e) {
+      // Ignore if BroadcastChannel is blocked
+    }
+
+    // Fallback sync via localStorage storage event
+    const handleStorage = (e) => {
+      if (e.key === 'portfolio_data_sync') {
+        fetchLatestData()
+      }
+    }
+
+    // Auto-refresh when tab gains focus
+    const handleFocus = () => {
+      fetchLatestData()
+    }
+
+    window.addEventListener('storage', handleStorage)
+    window.addEventListener('focus', handleFocus)
+
+    return () => {
+      if (channel) channel.close()
+      window.removeEventListener('storage', handleStorage)
+      window.removeEventListener('focus', handleFocus)
     }
   }, [])
 
@@ -54,6 +112,16 @@ export function PortfolioProvider({ children }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newState, null, 2),
       })
+
+      // Notify other open tabs (e.g. portfolio tab) in real-time
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          const ch = new BroadcastChannel('portfolio_sync_channel')
+          ch.postMessage({ type: 'SYNC_DATA', payload: newState })
+          ch.close()
+        }
+      } catch (e) {}
+      localStorage.setItem('portfolio_data_sync', Date.now().toString())
     } catch (e) {
       console.error('Failed to save:', e)
     } finally {
@@ -95,7 +163,7 @@ export function PortfolioProvider({ children }) {
   }
 
   return (
-    <PortfolioContext.Provider value={{ state, dispatch, dispatchAndSave, saving, loading, theme, toggleTheme }}>
+    <PortfolioContext.Provider value={{ state, dispatch, dispatchAndSave, saving, loading, theme, toggleTheme, refreshData: fetchLatestData }}>
       {children}
     </PortfolioContext.Provider>
   )

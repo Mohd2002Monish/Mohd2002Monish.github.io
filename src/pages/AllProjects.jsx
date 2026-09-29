@@ -2,16 +2,16 @@ import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowUpRight, Search, Sparkles, Filter, Code2, Layers } from 'lucide-react'
-import { usePortfolio } from '../context/PortfolioContext'
+import { usePortfolio, resolveImageUrl } from '../context/PortfolioContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import LivePreviewModal from '../components/LivePreviewModal'
 
 const ease = [0.16, 1, 0.3, 1]
 
 function ProjectImage({ src, title }) {
   const [errored, setErrored] = useState(false)
-  if (errored || !src) {
+  const resolvedSrc = resolveImageUrl(src)
+  if (errored || !resolvedSrc) {
     return (
       <div
         className="w-full h-full flex flex-col items-center justify-center gap-3 relative overflow-hidden"
@@ -33,7 +33,7 @@ function ProjectImage({ src, title }) {
   }
   return (
     <img
-      src={src}
+      src={resolvedSrc}
       alt={title}
       loading="lazy"
       className="x-project-img w-full h-full object-cover"
@@ -75,8 +75,6 @@ export default function AllProjects() {
 
   const [activeFilter, setActiveFilter] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
-  const [previewUrl, setPreviewUrl] = useState(null)
-  const [previewTitle, setPreviewTitle] = useState('')
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -105,14 +103,6 @@ export default function AllProjects() {
       return matchesFilter && matchesQuery
     })
   }, [projects, activeFilter, searchQuery])
-
-  const handleLiveClick = (e, project) => {
-    if (project.liveUrl && window.matchMedia('(pointer: fine)').matches) {
-      e.preventDefault()
-      setPreviewUrl(project.liveUrl)
-      setPreviewTitle(project.title)
-    }
-  }
 
   return (
     <>
@@ -280,18 +270,6 @@ export default function AllProjects() {
                           }}
                         >
                           <ProjectImage src={project.image} title={project.title} />
-
-                          {/* Index Badge */}
-                          <span
-                            className="absolute top-2.5 left-2.5 font-mono text-[9.5px] tracking-wider px-2 py-0.5 rounded"
-                            style={{
-                              background: 'var(--x-bg)',
-                              color: 'var(--x-muted)',
-                              border: '1px solid var(--x-line-soft)',
-                            }}
-                          >
-                            PRJ—{String(i + 1).padStart(2, '0')}
-                          </span>
                         </div>
                       </CardTilt>
 
@@ -333,21 +311,9 @@ export default function AllProjects() {
                           href={project.liveUrl}
                           target="_blank"
                           rel="noreferrer"
-                          onClick={(e) => handleLiveClick(e, project)}
-                          className="x-link text-xs flex items-center gap-1"
+                          className="x-link text-xs flex items-center gap-1 font-mono uppercase tracking-wider"
                         >
                           <span>Live Demo</span>
-                          <ArrowUpRight size={12} className="x-link-arrow" />
-                        </a>
-                      )}
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="x-link text-xs flex items-center gap-1"
-                        >
-                          <span>Source Code</span>
                           <ArrowUpRight size={12} className="x-link-arrow" />
                         </a>
                       )}
@@ -361,14 +327,6 @@ export default function AllProjects() {
       </main>
 
       <Footer />
-
-      {previewUrl && (
-        <LivePreviewModal
-          url={previewUrl}
-          title={previewTitle}
-          onClose={() => setPreviewUrl(null)}
-        />
-      )}
     </>
   )
 }

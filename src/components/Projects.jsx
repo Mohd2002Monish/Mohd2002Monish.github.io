@@ -2,15 +2,15 @@ import React, { useState, useRef } from 'react'
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
-import { usePortfolio } from '../context/PortfolioContext'
-import LivePreviewModal from './LivePreviewModal'
+import { usePortfolio, resolveImageUrl } from '../context/PortfolioContext'
 import SectionHeader from './SectionHeader'
 
 const ease = [0.16, 1, 0.3, 1]
 
 function ProjectImage({ src, title }) {
   const [errored, setErrored] = useState(false)
-  if (errored || !src) {
+  const resolvedSrc = resolveImageUrl(src)
+  if (errored || !resolvedSrc) {
     return (
       <div
         className="w-full h-full flex flex-col items-center justify-center gap-3 relative overflow-hidden"
@@ -31,7 +31,7 @@ function ProjectImage({ src, title }) {
   }
   return (
     <img
-      src={src}
+      src={resolvedSrc}
       alt={title}
       loading="lazy"
       className="x-project-img w-full h-full object-cover"
@@ -96,18 +96,6 @@ function ProjectCard({ project, index, onLiveClick }) {
             }}
           >
             <ProjectImage src={project.image} title={project.title} />
-
-            {/* Mono Corner Tag */}
-            <span
-              className="absolute top-2.5 left-2.5 font-mono text-[9.5px] tracking-wider px-2 py-0.5 rounded"
-              style={{
-                background: 'var(--x-bg)',
-                color: 'var(--x-muted)',
-                border: '1px solid var(--x-line-soft)',
-              }}
-            >
-              PRJ—{String(index + 1).padStart(2, '0')}
-            </span>
           </div>
         </TiltFrame>
 
@@ -149,21 +137,9 @@ function ProjectCard({ project, index, onLiveClick }) {
             href={project.liveUrl}
             target="_blank"
             rel="noreferrer"
-            onClick={(e) => onLiveClick(e, project)}
             className="x-link text-xs flex items-center gap-1 font-mono uppercase tracking-wider"
           >
             <span>Live Demo</span>
-            <ArrowUpRight size={12} className="x-link-arrow" />
-          </a>
-        )}
-        {project.githubUrl && (
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="x-link text-xs flex items-center gap-1 font-mono uppercase tracking-wider"
-          >
-            <span>Source Code</span>
             <ArrowUpRight size={12} className="x-link-arrow" />
           </a>
         )}
@@ -175,16 +151,6 @@ function ProjectCard({ project, index, onLiveClick }) {
 export default function Projects() {
   const { state } = usePortfolio()
   const { projects } = state
-  const [previewUrl, setPreviewUrl] = useState(null)
-  const [previewTitle, setPreviewTitle] = useState('')
-
-  const handleLiveClick = (e, project) => {
-    if (project.liveUrl && window.matchMedia('(pointer: fine)').matches) {
-      e.preventDefault()
-      setPreviewUrl(project.liveUrl)
-      setPreviewTitle(project.title)
-    }
-  }
 
   // Display top 3 projects side-by-side
   const displayedProjects = projects.slice(0, 3)
@@ -201,7 +167,6 @@ export default function Projects() {
               key={project.id || i}
               project={project}
               index={i}
-              onLiveClick={handleLiveClick}
             />
           ))}
         </div>
@@ -237,14 +202,6 @@ export default function Projects() {
           </motion.div>
         )}
       </div>
-
-      {previewUrl && (
-        <LivePreviewModal
-          url={previewUrl}
-          title={previewTitle}
-          onClose={() => setPreviewUrl(null)}
-        />
-      )}
     </section>
   )
 }

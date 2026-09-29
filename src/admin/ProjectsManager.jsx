@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence, Reorder } from 'framer-motion'
-import { Plus, Pencil, Trash2, Check, X, ExternalLink, UploadCloud, GripVertical } from 'lucide-react'
+import { Plus, Pencil, Trash2, Check, X, ExternalLink, UploadCloud, GripVertical, ArrowUp, Star } from 'lucide-react'
 import { GithubIcon } from '../components/SocialIcons'
-import { usePortfolio } from '../context/PortfolioContext'
+import { usePortfolio, resolveImageUrl } from '../context/PortfolioContext'
 import toast from 'react-hot-toast'
 
 const empty = { title: '', image: '', stack: '', description: '', liveUrl: '', githubUrl: '' }
@@ -28,8 +28,9 @@ export default function ProjectsManager() {
   const handleAdd = async () => {
     if (!form.title.trim()) return toast.error('Project title is required')
     const newProject = { ...toProjectShape(form), id: Date.now().toString() }
-    await dispatchAndSave({ type: 'ADD_PROJECT', payload: newProject })
-    toast.success('Project added!')
+    // Put new project at the top so it is immediately featured on the homepage
+    await dispatchAndSave({ type: 'SET_PROJECTS', payload: [newProject, ...state.projects] })
+    toast.success('Project added and featured on homepage!')
     setForm(empty)
     setShowForm(false)
   }
@@ -48,6 +49,16 @@ export default function ProjectsManager() {
     toast.success('Project deleted')
   }
 
+  const moveToTop = async (id) => {
+    const projIndex = state.projects.findIndex(p => p.id === id)
+    if (projIndex <= 0) return
+    const updated = [...state.projects]
+    const [item] = updated.splice(projIndex, 1)
+    updated.unshift(item)
+    await dispatchAndSave({ type: 'SET_PROJECTS', payload: updated })
+    toast.success(`"${item.title}" is now featured on your homepage!`)
+  }
+
   const startEdit = (proj) => {
     setEditing(proj.id)
     setForm(fromProject(proj))
@@ -56,7 +67,7 @@ export default function ProjectsManager() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-white">Manage Projects</h2>
         <button
           onClick={() => { setShowForm(!showForm); setEditing(null); setForm(empty) }}
@@ -64,6 +75,16 @@ export default function ProjectsManager() {
         >
           <Plus size={15} /> Add Project
         </button>
+      </div>
+
+      {/* Homepage Guidance Banner */}
+      <div className="mb-6 p-4 rounded-xl bg-violet-950/40 border border-violet-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2.5 text-gray-300">
+          <span className="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>
+            <strong>Homepage Showcase:</strong> The top 3 projects are featured in your portfolio's <strong>Selected Work</strong> section. Drag handles <strong className="text-violet-300">::</strong> or click <strong className="text-violet-300">Feature on Home</strong> to prioritize any project.
+          </span>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -78,7 +99,7 @@ export default function ProjectsManager() {
             <ProjectForm form={form} setForm={setForm} />
             <div className="flex gap-2 mt-4">
               <button onClick={handleAdd} className="btn-primary flex items-center gap-1.5 text-sm py-2 px-4">
-                <Check size={14} /> Add
+                <Check size={14} /> Add Project
               </button>
               <button onClick={() => setShowForm(false)} className="btn-outline flex items-center gap-1.5 text-sm py-2 px-4">
                 <X size={14} /> Cancel
@@ -91,7 +112,7 @@ export default function ProjectsManager() {
       <div className="flex flex-col gap-4">
         <Reorder.Group axis="y" values={state.projects} onReorder={(newOrder) => dispatchAndSave({ type: 'SET_PROJECTS', payload: newOrder })} className="flex flex-col gap-4">
           <AnimatePresence>
-            {state.projects.map((project) => (
+            {state.projects.map((project, index) => (
               <Reorder.Item
                 key={project.id}
                 value={project}
@@ -114,14 +135,14 @@ export default function ProjectsManager() {
                 </div>
               ) : (
                 <div className="flex gap-4 items-start">
-                  <div className="mt-2 cursor-grab active:cursor-grabbing text-gray-500 hover:text-violet-400 transition-colors">
+                  <div className="mt-2 cursor-grab active:cursor-grabbing text-gray-500 hover:text-violet-400 transition-colors" title="Drag to reorder">
                     <GripVertical size={16} />
                   </div>
                   {/* Thumbnail */}
                   <div className="w-20 h-14 rounded-lg overflow-hidden flex-shrink-0" style={{ backgroundColor: '#0d1526' }}>
                     {project.image ? (
                       <img
-                        src={project.image}
+                        src={resolveImageUrl(project.image)}
                         alt={project.title}
                         className="w-full h-full object-cover"
                         onError={(e) => { e.target.style.display = 'none' }}
@@ -135,7 +156,18 @@ export default function ProjectsManager() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <div className="text-white font-semibold">{project.title}</div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-white font-semibold">{project.title}</span>
+                          {index < 3 ? (
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold flex items-center gap-1">
+                              ★ Featured on Home (#{index + 1})
+                            </span>
+                          ) : (
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 border border-white/10 text-gray-400">
+                              Full Archive (#{index + 1})
+                            </span>
+                          )}
+                        </div>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {project.stack.slice(0, 4).map(t => (
                             <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-violet-600/15 border border-violet-500/20 text-violet-300">{t}</span>
@@ -145,16 +177,24 @@ export default function ProjectsManager() {
                           )}
                         </div>
                         <p className="text-gray-500 text-xs mt-1.5 line-clamp-2">{project.description}</p>
-                        <div className="flex gap-3 mt-2">
-                          {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noreferrer" className="text-cyan-400 text-xs flex items-center gap-1 hover:underline"><ExternalLink size={11} />Live</a>}
-                          {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noreferrer" className="text-gray-400 text-xs flex items-center gap-1 hover:underline"><GithubIcon size={11} />Code</a>}
+                        <div className="flex gap-3 mt-2 items-center">
+                          {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noreferrer" className="text-cyan-400 text-xs flex items-center gap-1 hover:underline"><ExternalLink size={11} />Live Demo</a>}
+                          {index >= 3 && (
+                            <button
+                              onClick={() => moveToTop(project.id)}
+                              className="text-xs px-2.5 py-0.5 rounded bg-violet-600/20 hover:bg-violet-600/40 text-violet-300 border border-violet-500/30 flex items-center gap-1 transition-colors"
+                              title="Feature on homepage"
+                            >
+                              <ArrowUp size={11} /> Feature on Home
+                            </button>
+                          )}
                         </div>
                       </div>
                       <div className="flex gap-1 flex-shrink-0">
-                        <button onClick={() => startEdit(project)} className="w-7 h-7 rounded-lg hover:bg-violet-600/20 hover:text-violet-400 text-gray-500 transition-all flex items-center justify-center">
+                        <button onClick={() => startEdit(project)} className="w-7 h-7 rounded-lg hover:bg-violet-600/20 hover:text-violet-400 text-gray-500 transition-all flex items-center justify-center" title="Edit">
                           <Pencil size={13} />
                         </button>
-                        <button onClick={() => handleDelete(project.id)} className="w-7 h-7 rounded-lg hover:bg-red-500/20 hover:text-red-400 text-gray-500 transition-all flex items-center justify-center">
+                        <button onClick={() => handleDelete(project.id)} className="w-7 h-7 rounded-lg hover:bg-red-500/20 hover:text-red-400 text-gray-500 transition-all flex items-center justify-center" title="Delete">
                           <Trash2 size={13} />
                         </button>
                       </div>
@@ -171,23 +211,53 @@ export default function ProjectsManager() {
   )
 }
 
+function compressImage(file, maxWidth = 1400, quality = 0.85) {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onload = () => {
+        let width = img.width
+        let height = img.height
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width)
+          width = maxWidth
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, width, height)
+        const dataUrl = canvas.toDataURL('image/jpeg', quality)
+        resolve(dataUrl)
+      }
+      img.onerror = () => resolve(e.target.result)
+      img.src = e.target.result
+    }
+    reader.onerror = () => resolve('')
+    reader.readAsDataURL(file)
+  })
+}
+
 function ProjectForm({ form, setForm }) {
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    if (file.size > 2 * 1024 * 1024) {
-      return toast.error('Image must be less than 2MB')
+    if (file.size > 10 * 1024 * 1024) {
+      return toast.error('Image must be less than 10MB')
     }
 
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setForm({ ...form, image: reader.result })
+    try {
+      const optimized = await compressImage(file)
+      setForm({ ...form, image: optimized })
+      toast.success('Image loaded and optimized!')
+    } catch {
+      toast.error('Failed to load image')
     }
-    reader.readAsDataURL(file)
   }
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault()
     const file = e.dataTransfer.files?.[0]
     if (!file) return
@@ -196,15 +266,17 @@ function ProjectForm({ form, setForm }) {
        return toast.error('Please upload an image file')
     }
 
-    if (file.size > 2 * 1024 * 1024) {
-      return toast.error('Image must be less than 2MB')
+    if (file.size > 10 * 1024 * 1024) {
+      return toast.error('Image must be less than 10MB')
     }
 
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setForm({ ...form, image: reader.result })
+    try {
+      const optimized = await compressImage(file)
+      setForm({ ...form, image: optimized })
+      toast.success('Image loaded and optimized!')
+    } catch {
+      toast.error('Failed to load image')
     }
-    reader.readAsDataURL(file)
   }
 
   return (
@@ -234,7 +306,7 @@ function ProjectForm({ form, setForm }) {
           />
           {form.image ? (
             <div className="relative w-full aspect-video rounded-lg overflow-hidden flex items-center justify-center" style={{ backgroundColor: '#0d1526' }}>
-              <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
+              <img src={resolveImageUrl(form.image)} alt="Preview" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
                 <span className="text-white text-sm font-medium">Click to change</span>
               </div>
@@ -243,7 +315,7 @@ function ProjectForm({ form, setForm }) {
             <div className="flex flex-col items-center py-4 text-gray-400">
               <UploadCloud size={24} className="mb-2 text-violet-400" />
               <p className="text-sm font-medium text-white">Click or drag image to upload</p>
-              <p className="text-xs mt-1">SVG, PNG, JPG (max 2MB)</p>
+              <p className="text-xs mt-1">SVG, PNG, JPG (auto-compressed)</p>
             </div>
           )}
         </div>
