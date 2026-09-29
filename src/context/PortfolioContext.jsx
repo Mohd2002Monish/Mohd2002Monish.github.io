@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect, useState } from 'react'
 import defaultData from '../data/portfolio-data.json'
+import { fetchLivePortfolioData, syncToGitHubRepo } from '../utils/centralSync'
 
 const PortfolioContext = createContext(null)
 
@@ -37,12 +38,12 @@ export const resolveImageUrl = (img) => {
 }
 
 export function PortfolioProvider({ children }) {
-  // Always use defaultData from portfolio-data.json as the single source of truth
+  // Always use defaultData from portfolio-data.json as initial baseline
   const [state, dispatch] = useReducer(reducer, defaultData)
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
 
-  // Clear any legacy localStorage data caches that would override portfolio-data.json
+  // Clear any legacy localStorage data caches
   useEffect(() => {
     try {
       localStorage.removeItem('portfolio_custom_data')
@@ -50,20 +51,30 @@ export function PortfolioProvider({ children }) {
   }, [])
 
   const fetchLatestData = async () => {
-    if (!IS_DEV) {
-      setLoading(false)
-      return
-    }
-    try {
-      const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
-      if (res.ok) {
-        const data = await res.json()
-        dispatch({ type: 'SET_DATA', payload: data })
+    if (IS_DEV) {
+      try {
+        const res = await fetch(`/api/portfolio?t=${Date.now()}`, { cache: 'no-store' })
+        if (res.ok) {
+          const data = await res.json()
+          dispatch({ type: 'SET_DATA', payload: data })
+        }
+      } catch (e) {
+        console.warn('Could not fetch portfolio data:', e)
+      } finally {
+        setLoading(false)
       }
-    } catch (e) {
-      console.warn('Could not fetch portfolio data:', e)
-    } finally {
-      setLoading(false)
+    } else {
+      // In production, fetch the live centralized file from GitHub Raw
+      try {
+        const liveData = await fetchLivePortfolioData()
+        if (liveData) {
+          dispatch({ type: 'SET_DATA', payload: liveData })
+        }
+      } catch (e) {
+        console.warn('Could not fetch live centralized data:', e)
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
@@ -133,6 +144,22 @@ export function PortfolioProvider({ children }) {
         })
       } catch (e) {
         console.error('Failed to save to disk:', e)
+      } finally {
+        setSaving(false)
+      }
+    }
+
+    // 3. Centralized Live Rewrite: If GitHub Token is configured, commit directly to GitHub repository
+    const ghToken = localStorage.getItem('github_sync_token')
+    if (ghToken) {
+      setSaving(true)
+      try {
+        await syncToGitHubRepo({
+          token: ghToken,
+          data: newState,
+        })
+      } catch (e) {
+        console.error('Failed to rewrite centralized file on GitHub:', e)
       } finally {
         setSaving(false)
       }
