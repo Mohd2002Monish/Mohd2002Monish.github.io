@@ -56,12 +56,18 @@ function portfolioDataPlugin() {
   }
 }
 
-export default defineConfig(({ command }) => ({
-  base: command === 'serve' ? '/' : '/dev-monish-portfolio/',
-  plugins: [react(), portfolioDataPlugin()],
-  server: {
-    watch: {
-      ignored: ['**/src/data/portfolio-data.json'],
+export default defineConfig(({ command }) => {
+  // If deploying to root user page (mohd2002monish.github.io), base is '/'
+  // Can be overridden via VITE_BASE if deploying to a subpath
+  const base = process.env.VITE_BASE || '/'
+
+  return {
+    base,
+    plugins: [react(), portfolioDataPlugin()],
+    server: {
+      watch: {
+        ignored: ['**/src/data/portfolio-data.json'],
+      },
     },
-  },
-}))
+  }
+})
